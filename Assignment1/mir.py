@@ -137,10 +137,6 @@ class MidiNotes():
     def freq(self, name):
         return self._notes[name]
 
-# Removed code
-#phase.append(math.atan((imag/real)/length))
-#output.append([real, imag])
-
 def main():
 
     sin1 = Sinusoid(1, 256, 1.0, 100, 0)
@@ -253,5 +249,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
