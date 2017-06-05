@@ -260,3 +260,57 @@ interaction. Describe the user interaction and motivate its usage contrasting
 it with a traditional screen/keyboard/mouse graphical user interface. Although
 you don’t need to do any hardware design try to propose something
 that can be engineered using existing technologies.
+
+
+# Assignment 5
+
+## Question 1
+
+Vamp is an audio processing plugin system for plugins that extract descriptive
+information from audio data typically referred to as audio analysis
+plugins or audio feature extraction plugins. It supports multiple types
+of outputs and output types and there are a variety of tools for using
+(and making VAMP plugins, something we won’t do). More information
+about VAMP plugins, the associated tools, and design can be found at:
+http://www.vamp-plugins.org/.
+
+The goal of this question is to apply structure segmentation using two
+plugins: the Segmentino plugin, and the Segmenter from the Queen Mary
+plugin set. Both plugins can be obtained from: http://www.vamp-plugins.
+org/download.html.
+
+<b>Part 1:</b> Using the Sonic Visualizer tools, visulaize the segmentation results of
+the two plugins for two audio files of your choice. Provide screenshots
+of the segmentation results
+
+<b>Part 2:</b> Using the Sonic Annotator tool, show how you can process the same
+two files from the commend line. Show the commands you used 
+
+<b>Part 3:</b> Using any tool do a structural segmentation of the audio yourself.
+For example you can use Audacity and a label track to annotate the
+segments. Convert your manual segentation and the two automatic
+segmentations for each song to the same format and compare them by
+listening. Describe in words what are the differences 
+
+## Question 2
+
+MIREX is the annual Music Information Retrieval Evaluation Exchange.
+You can read about it at: http://www.music-ir.org/mirex/wiki/MIREX_
+HOME. mir eval is a great Python package that implements many of the evaluation
+metrics for the various MIR tasks. The objective of this question is
+to use mir eval to perform a more formal computer evaluation of the segmentation
+results from the previous question. You can read about the segmentation
+evaluation metrics at: https://craffel.github.io/mir_eval/
+#module-mir_eval.segment
+
+<b>Part 1:</b> Use the vampy host to run the segmentation plugins from the previous
+question inside Python for the two files you processed. You can
+find the code at: https://code.soundsoftware.ac.uk/projects/
+vampy-host.
+
+<b>Part 2:</b> Connect the vampy code for computing the segmentation with the
+mir eval code for evaluation. Print the pair-wise F-measure for all
+4 combinations of track and segmentation plugin using your manual
+structure segmentation as the ground truth. Discuss whether the pairwise
+F-measure corresponds to your listening perception of segmentation
+quality
