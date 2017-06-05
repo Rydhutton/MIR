@@ -43,9 +43,12 @@ windowing ? Show the corresponding plots.
 The goal in this question is to extract a fundamental frequency contour from
 an audio file. In order to test your code utilize the following audio input
 signals:
+
 • The little melody you created in assignment 1
+
 • The same melody hummed by you and recorded in Audacity. Use a
 single vowel like Ah for your singing.
+
 • The qbhexamples.wav available under Resources in Connex.
 
 ## Question 1
@@ -99,9 +102,13 @@ corresponding folder of: http://marsyas.cs.uvic.ca/sound/genres/
 Run two instances of your centroid sonification script at the same time
 (using two command-line windows) to compare the results of pairs of different
 input audio files:
+
 • classical and classical
+
 • classical and metal
+
 • metal and metal
+
 To some extent this would be what an automatic genre classification
 system based purely on the Spectral Centroid would ”hear” to make a decision
 of classical or metal. FYI using just the mean of the spectral centroid
@@ -109,8 +116,147 @@ a trained classifier makes the right decision 75% of the time. This is impressiv
 given that decisions are made every 20 milliseconds so even better
 results could be obtained by some majority voting/filtering over the entire
 file.
+
 To see the influence of the texture window replaces each centroid value
 with the average of the previous 20 centroid values and plot again the contours.
 Then sonify the resulting smoother contour. Provide a very brief
 commentary (no more than 3-4 sentences) of your observations on this soni-
 fication experiment.
+
+
+# Assignment 3
+
+## Question 1
+
+Download the 1.2 GB genre classification dataset from:
+http://marsyas.info/downloads/datasets.html
+
+You will only need 1.2 GB of space for download but after that you can pick
+any three genres out of the 10 genres for your experiments. Alternatively if
+you don’t have enough space you can download individual files for 3 genres
+(at least 20 tracks for each genre) from:
+http://marsyas.cs.uvic.ca/sound/genres/
+
+Read the instructions in Chapter 3 of the Marsyas User Manual (Tour -
+Command Line Tools) and use the bextract command-line program to
+extract features for the 3 genres you selected. Load the extracted .arff
+file into Weka and report on the classification accuracy of the following
+classifiers: ZeroR, NaiveBayesSimple, J48, and SMO.
+
+<b>Part 1:</b> Your deliverable will be the list of command you used and the classification
+accuracy + confusion matrix for each classifier for the 3-genre
+experiment.
+
+<b>Part 2:</b> Now use Weka to convert the .arff to the .libsvm format that is supported
+by scikit-learn. Do a similar experiment using scikit-learn i.e 3 classifiers and
+report accuracy and confusion matrix. Provide a listing of the relevant code
+
+## Question 2
+
+Text categorization is the task of assigning a given document to one of a fixed
+set of categories, on the basis of text it contains. Naive Bayes models are
+often used for this task. In these models, the query variable is the document
+category, and the “effect” variables are the presence/absence of each word
+in the language; the assumption is that words occur independently in documents
+within a given category (conditional independence), with frequencies
+determined by document category.
+
+Our goal will be to build a simple Naive Bayes classifier for the MSD
+dataset, which uses lyrics to classify music into genres. More complicated
+approaches using term frequency and inverse document frequency weighting
+and many more words are possible but the basic concepts are the same.
+The goal is to understand the whole process, so do not use existing machine
+learning packages but rather build the classifier from “scratch”.
+
+We are going to use the musicXmatch 1 dataset which is a large collection
+of song lyrics in bag-of-words format for some of the trak IDS contained in
+the Million Song dataset (MSD). The correspondent genre annotations, for
+some of the song in the musicXmatch dataset, is provided by the MSD Allmusic
+Genre Dataset 2. For the purpose of this course, in order to simplify
+the problem, we are going to use a reduced version of the musicXmatch
+dataset. Three genres are considered, namely: “Rap”, “Pop Rock”, and
+“Country”. The resulting genre annotated dataset is obtained by an intersection
+of musicXmatch and MAGD, where we select 1000 instances of
+each genre, such that the three classes are balanced and easy to handle. In
+addition, we also reduce the cardinality of the dictionary of words used for
+the bag-of-words lyrics representation (originally equal to 5000), to the 10
+best words for each genre. Intuitively, the best words are the most frequent
+words for a particular genre that are not frequent among all the genres 3
+.
+The resulting dictionary of the three genres is:
+
+[ ’ de ’ , ’ ni g g az ’ , ’ ya ’ , ’ und ’ , ’ y all ’ , # rap<br>
+’ ich ’ , ’ fuck ’ , ’ s hi t ’ , ’ yo ’ , ’ bi t c h ’ , # rap<br>
+’ end ’ , ’ wait ’ , ’ again ’ , ’ l i g h t ’ , ’ eye ’ , # rock<br>
+’ noth ’ , ’ l i e ’ , ’ f a l l ’ , ’ our ’ , ’ away ’ , # rock<br>
+’ gone ’ , ’ good ’ , ’ ni gh t ’ , ’ blue ’ , ’ home ’ , # country<br>
+’ long ’ , ’ l i t t l ’ , ’ w ell ’ , ’ he a r t ’ , ’ old ’ ] # country
+
+An additional simplification of the problem is to consider just the presence
+or absence of a particular word, instead of the frequency count. Therefore according
+to this problem setup, the feature vector of the song TRAAAHZ128E0799171
+is [0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+0]
+
+For answering this question we provide you with:
+
+• data.npz – the three genres dataset (not binarized)
+
+• labels.npz – the genre labels where Rap=12, Pop Rock=1, and Country=3)
+
+• dictionary.pck – the full 5000 words dictionary
+
+• words.pck – the 30 best word indexes with respect to the full dictionary
+
+• tracks.pck – the track IDs of songs used.
+
+. These data is available in either Python pickle format (*.pck), or NumPy
+format (*.npz) and can be found at: http://marsyas.cs.uvic.ca/csc475_
+asn3_data.tar.gz
+
+<b>Part 1:</b> Write code that calculates the probabilities for each dictionary
+word given the genre. For the purposes of this assignment we are
+considering only the tracks belonging to the three genres: Rap, Rock
+pop, Country
+
+<b>Part 2:</b> Explain how these probability estimates can be combined to form
+a Naive Bayes classifier. Calculate the classification accuracy and confusion
+matrix that you would obtain using the whole data set for both
+training and testing partitions.
+
+<b>Part 3:</b> Read the Wikipedia page about cross-validation in statistics 4
+.
+Calculate the classification accuracy and confusion matrix using the
+k−fold cross-validation, where k = 10. Note that you would use both
+the training and testing data and generate your own splits.
+
+<b>Part 4:</b> One can consider the Naive Bayes classifier a generative model
+that can generate binary feature vectors using the associated probabilities
+from the training data. The idea is similar to how we do direct
+sampling in Bayesian Networks and depends on generating random
+number from a discrete distribution (the unifying underlying theme
+of this assignment). Describe how you would generate random genre
+“lyrics” consisting solely of the words from the dictionary using your
+model. Show 5 examples of randomly generated tracks for each of
+the three genres: Rap, Rock pop, and Country; each example should
+consist of a subset of the words in the dictionary.
+
+
+# Assignment 4
+
+## Question 1
+
+Check out the tangible music interfaces in http://modin.yuri.at/tangibles.
+Look at all the categories(tangibles, blocks, toys). Pick 3 that you find interesting
+and write a short summary (1 paragraph for each interface) of what
+you find interesting about them.
+
+## Question 2
+
+Propose a tangible interface that is somehow combined or related to the concepts
+we have covered in this course. Basically it should somehow combine
+the algorithms/tasks we have learned with some form of physical tangible
+interaction. Describe the user interaction and motivate its usage contrasting
+it with a traditional screen/keyboard/mouse graphical user interface. Although
+you don’t need to do any hardware design try to propose something
+that can be engineered using existing technologies.
